@@ -27,6 +27,7 @@ func NewCliServer(mode string, port string, fn CliRegisterFn) *CliServer {
 }
 
 func (c *CliServer) Start() error {
+	c.ginRegister(c.engine)
 	err := c.engine.Run(fmt.Sprintf(":%s", c.port))
 	if err != nil {
 		return err
