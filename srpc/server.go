@@ -25,17 +25,17 @@ func MustNewServer(c RpcServerConf, register GrpcRegisterFn) *RpcServer {
 }
 
 // Start 启动grpc服务端
-func (s *RpcServer) Start() {
+func (s *RpcServer) Start() error {
 	//监听端口
 	lis, err := net.Listen("tcp", s.listenOn)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	//服务注册
 	_, err = s.etcdRegister.Register()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	//绑定grpc路由
@@ -44,8 +44,10 @@ func (s *RpcServer) Start() {
 	//监听服务
 	err = s.grpcServer.Serve(lis)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	
+	return nil
 }
 
 // Stop 关闭grpc服务端

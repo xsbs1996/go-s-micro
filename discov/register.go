@@ -131,5 +131,7 @@ func (r *Register) keepAlive() error {
 
 // Stop 停止保活
 func (r *Register) Stop() {
-	r.closeCh <- struct{}{}
+	if r.closeCh != nil {
+		r.closeCh <- struct{}{}
+	}
 }
