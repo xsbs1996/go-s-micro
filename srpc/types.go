@@ -21,7 +21,6 @@ type RpcServerConf struct {
 }
 
 type RpcClientConf struct {
-	Name    string                  `yaml:"Name" required:"true"`
 	Etcd    discov.EtcdResolverConf `yaml:"Etcd" required:"true"`
 	Timeout int64                   `yaml:"Timeout" default:"2000"`
 }
