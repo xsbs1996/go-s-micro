@@ -14,16 +14,16 @@ type RpcServer struct {
 }
 
 type RpcServerConf struct {
-	Name     string
-	ListenOn string
-	Etcd     discov.EtcdRegisterConf
-	Timeout  int64
+	Name     string                  `yaml:"Name" required:"true"`
+	ListenOn string                  `yaml:"ListenOn" required:"true"`
+	Etcd     discov.EtcdRegisterConf `yaml:"Etcd"`
+	Timeout  int64                   `yaml:"Timeout" default:"2000"`
 }
 
 type RpcClientConf struct {
-	Name    string
-	Etcd    discov.EtcdResolverConf
-	Timeout int64
+	Name    string                  `yaml:"Name" required:"true"`
+	Etcd    discov.EtcdResolverConf `yaml:"Etcd" required:"true"`
+	Timeout int64                   `yaml:"Timeout" default:"2000"`
 }
 
 type GrpcRegisterFn func(*grpc.Server)

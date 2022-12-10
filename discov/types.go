@@ -1,15 +1,15 @@
 package discov
 
 type EtcdRegisterConf struct {
-	Hosts []string
-	Key   string
-	User  string
-	Pass  string
+	Hosts []string `yaml:"Hosts" required:"true"`
+	Key   string   `yaml:"Key" required:"true"`
+	User  string   `yaml:"User"`
+	Pass  string   `yaml:"Pass"`
 }
 
 type EtcdResolverConf struct {
-	Hosts []string
-	Key   string
-	User  string
-	Pass  string
+	Hosts []string `yaml:"Hosts" required:"true"`
+	Key   string   `yaml:"Key" required:"true"`
+	User  string   `yaml:"User"`
+	Pass  string   `yaml:"Pass"`
 }
