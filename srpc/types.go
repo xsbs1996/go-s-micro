@@ -14,12 +14,14 @@ type RpcServer struct {
 }
 
 type RpcServerConf struct {
+	Name     string
 	ListenOn string
 	Etcd     discov.EtcdRegisterConf
 	Timeout  int64
 }
 
 type RpcClientConf struct {
+	Name    string
 	Etcd    discov.EtcdResolverConf
 	Timeout int64
 }
