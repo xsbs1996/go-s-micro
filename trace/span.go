@@ -93,10 +93,6 @@ func (s *Span) Fork(ctx *gin.Context, serviceName, operationName string) tracesp
 	return span
 }
 
-func (s *Span) ServiceOperation() string {
-	return fmt.Sprintf("%s/%s", s.serviceName, s.operationName)
-}
-
 func (s *Span) SpanID() string {
 	return s.ctx.SpanID()
 }
@@ -152,4 +148,8 @@ func StartServerSpan(ctx *gin.Context, carrier Carrier, serviceName, operationNa
 	span := newServerSpan(carrier, serviceName, operationName)
 	ctx.Set(tracespec.TracingKey, span)
 	return span
+}
+
+func (s *Span) Operation() string {
+	return s.operationName
 }
