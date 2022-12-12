@@ -7,7 +7,6 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/resolver"
 )
 
 func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn {
@@ -15,8 +14,7 @@ func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn
 
 	discov.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov.DialTimeout})
 	//注册grpc解析器
-	discovResolver := discov.NewResolver(c.Etcd.Key)
-	resolver.Register(discovResolver)
+	discov.EtcdResolverRegister(discov.NewResolver(c.Etcd.Key))
 
 	//获取grpc连接
 	cli, err := NewClient(context.Background(), c, options...)
