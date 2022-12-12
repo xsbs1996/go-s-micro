@@ -11,6 +11,7 @@ import (
 const (
 	callerKey    = "caller"
 	contentKey   = "content"
+	operationKey = "operation"
 	spanKey      = "span"
 	timestampKey = "@timestamp"
 	traceKey     = "trace"
@@ -31,6 +32,7 @@ func TracingLog() gin.HandlerFunc {
 
 		logrus.WithField(timestampKey, logfunc.GetTimestamp()).
 			WithField(callerKey, logfunc.GetCaller(logfunc.CallerDepth)).
+			WithField(operationKey, span.ServiceOperation()).
 			WithField(spanKey, span.SpanID()).
 			WithField(traceKey, span.TraceID()).
 			WithField(contentKey, span).Info("Tracing")

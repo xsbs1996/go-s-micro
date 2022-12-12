@@ -93,6 +93,10 @@ func (s *Span) Fork(ctx *gin.Context, serviceName, operationName string) tracesp
 	return span
 }
 
+func (s *Span) ServiceOperation() string {
+	return fmt.Sprintf("%s/%s", s.operationName, s.operationName)
+}
+
 func (s *Span) SpanID() string {
 	return s.ctx.SpanID()
 }
