@@ -3,6 +3,7 @@ package scli
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/xsbs1996/go-s-micro/scli/handler"
 )
 
 type CliServer struct {
@@ -27,6 +28,12 @@ func NewCliServer(mode string, port string, fn CliRegisterFn) *CliServer {
 }
 
 func (c *CliServer) Start() error {
+	// 添加全局中间件
+	c.engine.Use(
+		handler.TracingHandler(),
+		handler.TracingLog(),
+	)
+
 	c.ginRegister(c.engine)
 	err := c.engine.Run(fmt.Sprintf(":%s", c.port))
 	if err != nil {
