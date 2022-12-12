@@ -33,7 +33,7 @@ func TracingLog() gin.HandlerFunc {
 			WithField(callerKey, logfunc.GetCaller(logfunc.CallerDepth)).
 			WithField(spanKey, span.SpanID()).
 			WithField(traceKey, span.TraceID()).
-			WithField(contentKey, span)
+			WithField(contentKey, span).Info("Tracing")
 
 		ctx.Next()
 	}
