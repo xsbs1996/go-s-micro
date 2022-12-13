@@ -50,13 +50,15 @@ func newServerSpan(carrier Carrier, serviceName string, operationName string) tr
 
 	return &Span{
 		ctx: spanContext{
-			traceID: traceId,
-			spanID:  spanId,
+			traceID:      traceId,
+			spanID:       spanId,
+			parentSpanID: "0",
 		},
 		serviceName:   serviceName,
 		operationName: operationName,
 		startTime:     timefunc.Time(),
 		flag:          serverFlag,
+		children:      0,
 	}
 
 }
@@ -98,8 +100,9 @@ func (s *Span) Fork(ctx *gin.Context, serviceName, operationName string) tracesp
 func (s *Span) GrpcFork(ctx context.Context, serviceName, operationName string) (context.Context, tracespec.Trace) {
 	span := &Span{
 		ctx: spanContext{
-			traceID: s.ctx.traceID,
-			spanID:  s.forkSpanID(),
+			traceID:      s.ctx.traceID,
+			spanID:       s.forkSpanID(),
+			parentSpanID: s.SpanID(),
 		},
 		serviceName:   serviceName,
 		operationName: operationName,
@@ -115,6 +118,10 @@ func (s *Span) SpanID() string {
 
 func (s *Span) TraceID() string {
 	return s.ctx.TraceID()
+}
+
+func (s *Span) ParentSpanID() string {
+	return s.ctx.ParentSpanID()
 }
 
 func (s *Span) Visit(fn func(key, val string) bool) {

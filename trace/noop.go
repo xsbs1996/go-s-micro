@@ -33,5 +33,9 @@ func (s noopSpan) TraceID() string {
 	return ""
 }
 
+func (s noopSpan) ParentSpanID() string {
+	return ""
+}
+
 func (s noopSpan) Visit(fn func(key, val string) bool) {
 }
