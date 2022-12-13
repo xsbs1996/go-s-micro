@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/sirupsen/logrus"
 	"github.com/xsbs1996/go-s-micro/discov"
+	"github.com/xsbs1996/go-s-micro/srpc/clientinterceptor"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -27,7 +28,23 @@ func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn
 
 func NewClient(ctx context.Context, c RpcClientConf, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
 	target := discov.BuildDiscovTarget(c.Etcd.Hosts, c.Etcd.Key)
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	options := buildDialOptions()
+	opts = append(opts, options...)
 	conn, err := grpc.DialContext(ctx, target, opts...)
 	return conn, err
+}
+
+// 绑定方法
+func buildDialOptions() []grpc.DialOption {
+	return []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+		WithUnaryClientInterceptors(
+			clientinterceptor.TracingInterceptor,
+		),
+	}
+}
+
+func WithUnaryClientInterceptors(interceptors ...grpc.UnaryClientInterceptor) grpc.DialOption {
+	return grpc.WithChainUnaryInterceptor(interceptors...)
 }

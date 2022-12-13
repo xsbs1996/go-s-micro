@@ -2,6 +2,7 @@ package srpc
 
 import (
 	"github.com/xsbs1996/go-s-micro/discov"
+	"github.com/xsbs1996/go-s-micro/srpc/serverinterceptors"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
 	"net"
@@ -9,8 +10,15 @@ import (
 
 // MustNewServer 综合启动项
 func MustNewServer(c RpcServerConf, register GrpcRegisterFn) *RpcServer {
-	server := grpc.NewServer()
 	c.verify()
+
+	var options = make([]grpc.ServerOption, 0)
+	unaryInterceptors := []grpc.UnaryServerInterceptor{
+		serverinterceptors.UnaryTracingInterceptor(c.Name),
+	}
+	options = append(options, WithUnaryServerInterceptors(unaryInterceptors...))
+
+	server := grpc.NewServer(options...)
 
 	discov.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov.DialTimeout})
 	etcdRegister := discov.NewRegister(c.Etcd.Key, c.ListenOn, discov.DefaultServiceTTL)
@@ -46,7 +54,7 @@ func (s *RpcServer) Start() error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 
@@ -54,4 +62,8 @@ func (s *RpcServer) Start() error {
 func (s *RpcServer) Stop() {
 	s.grpcServer.Stop()
 	s.etcdRegister.Stop()
+}
+
+func WithUnaryServerInterceptors(interceptors ...grpc.UnaryServerInterceptor) grpc.ServerOption {
+	return grpc.ChainUnaryInterceptor(interceptors...)
 }

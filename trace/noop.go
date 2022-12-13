@@ -1,6 +1,7 @@
 package trace
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/xsbs1996/go-s-micro/trace/tracespec"
 )
@@ -18,6 +19,10 @@ func (s noopSpan) Follow(ctx *gin.Context, serviceName, operationName string) tr
 
 func (s noopSpan) Fork(ctx *gin.Context, serviceName, operationName string) tracespec.Trace {
 	return emptyNoopSpan
+}
+
+func (s noopSpan) GrpcFork(ctx context.Context, serviceName, operationName string) (context.Context, tracespec.Trace) {
+	return ctx, emptyNoopSpan
 }
 
 func (s noopSpan) SpanID() string {

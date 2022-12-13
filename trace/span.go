@@ -1,6 +1,7 @@
 package trace
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/xsbs1996/go-s-micro/trace/tracespec"
@@ -93,6 +94,21 @@ func (s *Span) Fork(ctx *gin.Context, serviceName, operationName string) tracesp
 	return span
 }
 
+// GrpcFork 分支上下文跟踪
+func (s *Span) GrpcFork(ctx context.Context, serviceName, operationName string) (context.Context, tracespec.Trace) {
+	span := &Span{
+		ctx: spanContext{
+			traceID: s.ctx.traceID,
+			spanID:  s.forkSpanID(),
+		},
+		serviceName:   serviceName,
+		operationName: operationName,
+		startTime:     timefunc.Time(),
+		flag:          clientFlag,
+	}
+	return context.WithValue(ctx, tracespec.TracingKey, span), span
+}
+
 func (s *Span) SpanID() string {
 	return s.ctx.SpanID()
 }
@@ -148,6 +164,19 @@ func StartServerSpan(ctx *gin.Context, carrier Carrier, serviceName, operationNa
 	span := newServerSpan(carrier, serviceName, operationName)
 	ctx.Set(tracespec.TracingKey, span)
 	return span
+}
+
+func StartGrpcClientSpan(ctx context.Context, serviceName, operationName string) (context.Context, tracespec.Trace) {
+	if span, ok := ctx.Value(tracespec.TracingKey).(*Span); ok {
+		return span.GrpcFork(ctx, serviceName, operationName)
+	}
+
+	return ctx, emptyNoopSpan
+}
+
+func StartGrpcServerSpan(ctx context.Context, carrier Carrier, serviceName, operationName string) (context.Context, tracespec.Trace) {
+	span := newServerSpan(carrier, serviceName, operationName)
+	return context.WithValue(ctx, tracespec.TracingKey, span), span
 }
 
 func (s *Span) Operation() string {
