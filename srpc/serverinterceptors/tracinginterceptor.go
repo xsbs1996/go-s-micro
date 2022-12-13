@@ -21,7 +21,7 @@ func UnaryTracingInterceptor(serviceName string) grpc.UnaryServerInterceptor {
 		}
 
 		ctx, span := trace.StartGrpcServerSpan(ctx, carrier, serviceName, info.FullMethod)
-		fmt.Println(span)
+		fmt.Println(span.SpanID(), span.TraceID())
 		defer span.Finish()
 		return handler(ctx, req)
 	}
