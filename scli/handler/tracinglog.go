@@ -19,7 +19,7 @@ func TracingLog() gin.HandlerFunc {
 			ctx.Next()
 			return
 		}
-		logsj.TracingLog(span, ctx.Request)
+		logsj.TracingLog(span.Operation(), span.SpanID(), span.TraceID(), ctx.Request)
 		ctx.Next()
 	}
 }

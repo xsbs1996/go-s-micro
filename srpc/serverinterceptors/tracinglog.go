@@ -12,7 +12,7 @@ import (
 func TracingLog() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 		if span, ok := ctx.Value(tracespec.TracingKey).(*trace.Span); ok {
-			logsj.TracingLog(span, req)
+			logsj.TracingLog(span.Operation(), span.SpanID(), span.TraceID(), req)
 			return handler(ctx, req)
 		}
 		return handler(ctx, req)
