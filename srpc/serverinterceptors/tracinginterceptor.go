@@ -2,7 +2,6 @@ package serverinterceptors
 
 import (
 	"context"
-	"fmt"
 	"github.com/xsbs1996/go-s-micro/trace"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -21,8 +20,8 @@ func UnaryTracingInterceptor(serviceName string) grpc.UnaryServerInterceptor {
 		}
 
 		ctx, span := trace.StartGrpcServerSpan(ctx, carrier, serviceName, info.FullMethod)
-		fmt.Println(span.SpanID(), span.TraceID())
 		defer span.Finish()
+		
 		return handler(ctx, req)
 	}
 }
