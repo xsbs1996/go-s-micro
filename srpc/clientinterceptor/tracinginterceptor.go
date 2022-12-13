@@ -14,8 +14,6 @@ func TracingInterceptor(ctx context.Context, method string, req, reply interface
 
 	var pairs []string
 	span.Visit(func(key, val string) bool {
-		fmt.Println(2223323)
-		fmt.Println(key, val)
 		pairs = append(pairs, key, val)
 		return true
 	})
