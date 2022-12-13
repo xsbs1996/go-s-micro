@@ -1,4 +1,4 @@
-package go_srpc
+package logsj
 
 import (
 	"github.com/sirupsen/logrus"

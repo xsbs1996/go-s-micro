@@ -3,6 +3,7 @@ package discov
 import (
 	"errors"
 	"fmt"
+	_ "github.com/xsbs1996/go-s-micro/logsj"
 	"go.etcd.io/etcd/client/v3"
 	"sync"
 )

@@ -16,7 +16,7 @@ func TracingHandler() gin.HandlerFunc {
 
 		span := trace.StartServerSpan(ctx, carrier, sysfunc.Hostname(), ctx.Request.RequestURI)
 		defer span.Finish()
-		
+
 		ctx.Next()
 	}
 

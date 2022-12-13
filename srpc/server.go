@@ -15,7 +15,9 @@ func MustNewServer(c RpcServerConf, register GrpcRegisterFn) *RpcServer {
 	var options = make([]grpc.ServerOption, 0)
 	unaryInterceptors := []grpc.UnaryServerInterceptor{
 		serverinterceptors.UnaryTracingInterceptor(c.Name),
+		serverinterceptors.TracingLog(),
 	}
+
 	options = append(options, WithUnaryServerInterceptors(unaryInterceptors...))
 
 	server := grpc.NewServer(options...)
