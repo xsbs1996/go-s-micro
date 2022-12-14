@@ -139,7 +139,8 @@ func (r *Resolver) sync() {
 
 	if r.grpcClientConn != nil {
 		if err := r.grpcClientConn.UpdateState(resolver.State{Addresses: r.grpcAddrsList}); err != nil {
-			logrus.WithField("resolver.State", r.grpcAddrsList).WithField("err", err).Error("etcd sync UpdateState failed")
+			logrus.WithField("resolver.State", r.grpcAddrsList).WithField("err", err).Fatal("etcd sync UpdateState failed")
+			return
 		}
 	}
 
