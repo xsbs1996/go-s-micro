@@ -3,6 +3,7 @@ package discov
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/sirupsen/logrus"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc/resolver"
@@ -104,6 +105,8 @@ func (r *Resolver) watcher() error {
 		case <-r.closeCh:
 			return nil
 		case res, ok := <-r.watchCh:
+			fmt.Println("res", res)
+			fmt.Println("ok", ok)
 			if ok {
 				r.updateServiceList(res.Events)
 			} else {
