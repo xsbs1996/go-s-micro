@@ -96,9 +96,9 @@ func (r *Resolver) watcher() error {
 		return err
 	}
 
-	ticker := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(time.Second * 20)
 	defer ticker.Stop()
-	
+
 	r.watchCh = cli.Watch(context.Background(), r.keyPrefix, clientv3.WithPrefix())
 	for {
 		select {
