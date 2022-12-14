@@ -20,7 +20,8 @@ func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn
 	//获取grpc连接
 	cli, err := NewClient(context.Background(), c, options...)
 	if err != nil {
-		logrus.WithField("err", err).Error("MustNewClient error")
+		logrus.WithField("err", err).Fatal("MustNewClient error")
+		return nil
 	}
 
 	return cli
