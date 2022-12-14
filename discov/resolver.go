@@ -97,8 +97,9 @@ func (r *Resolver) watcher() error {
 	}
 
 	ticker := time.NewTicker(time.Minute)
+	defer ticker.Stop()
+	
 	r.watchCh = cli.Watch(context.Background(), r.keyPrefix, clientv3.WithPrefix())
-
 	for {
 		select {
 		case <-r.closeCh:
@@ -152,17 +153,14 @@ func (r *Resolver) updateServiceList(events []*clientv3.Event) {
 		switch ev.Type {
 		case clientv3.EventTypePut:
 			r.setServiceList(parseValue(ev.Kv.Key), parseValue(ev.Kv.Value))
-			if r.grpcClientConn != nil {
-				if err := r.grpcClientConn.UpdateState(resolver.State{Addresses: r.grpcAddrsList}); err != nil {
-					logrus.WithField("key", ev.Kv.Key).WithField("value", ev.Kv.Value).WithField("err", err).Error("etcd UpdateState failed")
-				}
-			}
 		case clientv3.EventTypeDelete:
-			r.delServiceList(parseValue(ev.Kv.Key), parseValue(ev.Kv.Value))
-			if r.grpcClientConn != nil {
-				if err := r.grpcClientConn.UpdateState(resolver.State{Addresses: r.grpcAddrsList}); err != nil {
-					logrus.WithField("key", ev.Kv.Key).WithField("value", ev.Kv.Value).WithField("err", err).Error("etcd  failed")
-				}
+			r.delServiceList(parseValue(ev.Kv.Key))
+		}
+
+		if r.grpcClientConn != nil {
+			if err := r.grpcClientConn.UpdateState(resolver.State{Addresses: r.grpcAddrsList}); err != nil {
+				logrus.WithField("key", ev.Kv.Key).WithField("value", ev.Kv.Value).WithField("err", err).Fatal("etcd UpdateState failed")
+				return
 			}
 		}
 	}
@@ -183,13 +181,18 @@ func (r *Resolver) setServiceList(key, val string) {
 }
 
 // DelServiceList 删除服务地址
-func (r *Resolver) delServiceList(key string, val string) {
+func (r *Resolver) delServiceList(key string) {
 	r.lock.Lock()
 	defer r.lock.Unlock()
+
+	value, ok := r.serverList[key]
+	if !ok {
+		return
+	}
 	delete(r.serverList, key)
 
 	for index, addr := range r.grpcAddrsList {
-		if addr.Addr == val {
+		if addr.Addr == value {
 			r.grpcAddrsList = append(r.grpcAddrsList[:index], r.grpcAddrsList[index+1:]...)
 		}
 	}
