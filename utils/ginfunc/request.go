@@ -1,12 +1,9 @@
-package handler
+package ginfunc
 
 import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/xsbs1996/go-s-micro/logsj"
-	"github.com/xsbs1996/go-s-micro/trace"
-	"github.com/xsbs1996/go-s-micro/trace/tracespec"
 	"io"
 	"net/http"
 	"sync"
@@ -14,26 +11,8 @@ import (
 
 const defaultMemory = 32 << 20
 
-func TracingLog() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		spanI, exists := ctx.Get(tracespec.TracingKey)
-		if !exists {
-			ctx.Next()
-			return
-		}
-		span, ok := spanI.(*trace.Span)
-		if !ok {
-			ctx.Next()
-			return
-		}
-
-		logsj.TracingLog(span.Operation(), span.SpanID(), span.TraceID(), requestInputs(ctx))
-		ctx.Next()
-	}
-}
-
 // RequestInputs 获取所有参数
-func requestInputs(ctx *gin.Context) map[string]interface{} {
+func RequestInputs(ctx *gin.Context) map[string]interface{} {
 	contentType := ctx.ContentType()
 
 	var (

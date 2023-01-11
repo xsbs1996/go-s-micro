@@ -1,9 +1,9 @@
-package scli
+package httpsj
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/xsbs1996/go-s-micro/scli/handler"
+	"github.com/xsbs1996/go-s-micro/httpsj/handler"
 )
 
 type CliServer struct {

@@ -155,6 +155,7 @@ func (s *Span) followSpanID() string {
 	return strings.Join(fields, spanSep)
 }
 
+// StartClientSpan 生成http客户端span
 func StartClientSpan(ctx *gin.Context, serviceName, operationName string) tracespec.Trace {
 	spanI, exists := ctx.Get(tracespec.TracingKey)
 	if !exists {
@@ -167,12 +168,14 @@ func StartClientSpan(ctx *gin.Context, serviceName, operationName string) traces
 	return emptyNoopSpan
 }
 
+// StartServerSpan 生成http服务端span
 func StartServerSpan(ctx *gin.Context, carrier Carrier, serviceName, operationName string) tracespec.Trace {
 	span := newServerSpan(carrier, serviceName, operationName)
 	ctx.Set(tracespec.TracingKey, span)
 	return span
 }
 
+// StartGrpcClientSpan 生成grpc客户端span
 func StartGrpcClientSpan(ctx context.Context, serviceName, operationName string) (context.Context, tracespec.Trace) {
 	if span, ok := ctx.Value(tracespec.TracingKey).(*Span); ok {
 		return span.GrpcFork(ctx, serviceName, operationName)
@@ -181,11 +184,17 @@ func StartGrpcClientSpan(ctx context.Context, serviceName, operationName string)
 	return ctx, emptyNoopSpan
 }
 
+// StartGrpcServerSpan 生成grpc服务端span
 func StartGrpcServerSpan(ctx context.Context, carrier Carrier, serviceName, operationName string) (context.Context, tracespec.Trace) {
 	span := newServerSpan(carrier, serviceName, operationName)
 	return context.WithValue(ctx, tracespec.TracingKey, span), span
 }
 
+// Operation 获取操作名称
 func (s *Span) Operation() string {
 	return s.operationName
+}
+
+func (s *Span) StartTime() time.Time {
+	return s.startTime
 }

@@ -2,7 +2,7 @@ package serverinterceptors
 
 import (
 	"context"
-	"github.com/xsbs1996/go-s-micro/logsj"
+	"github.com/xsbs1996/go-s-micro/core/logsj"
 	"github.com/xsbs1996/go-s-micro/trace"
 	"github.com/xsbs1996/go-s-micro/trace/tracespec"
 	"google.golang.org/grpc"
