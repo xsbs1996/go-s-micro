@@ -1,6 +1,7 @@
 package logsj
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/xsbs1996/go-s-micro/utils/logfunc"
 	"github.com/xsbs1996/go-s-micro/utils/sysfunc"
@@ -25,7 +26,7 @@ func TracingLog(operation, spanID, traceID interface{}, startTime time.Time, req
 		WithField(operationKey, operation).
 		WithField(spanKey, spanID).
 		WithField(traceKey, traceID).
-		WithField(runtime, time.Since(startTime)).
+		WithField(runtime, fmt.Sprintf("%d%s", time.Since(startTime).Milliseconds(), "ms")).
 		WithField(contentKey, req).
 		Info("Tracing")
 }
