@@ -32,6 +32,7 @@ func (c *CliServer) Start() error {
 	c.engine.Use(
 		handler.TracingHandler(),
 		handler.TracingLog(),
+		handler.BreakerHandler(),
 	)
 
 	c.ginRegister(c.engine)

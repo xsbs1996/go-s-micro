@@ -8,6 +8,7 @@ import (
 	"github.com/xsbs1996/go-s-micro/utils/ginfunc"
 )
 
+// TracingLog 链路追踪日志中间件
 func TracingLog() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		spanI, exists := ctx.Get(tracespec.TracingKey)

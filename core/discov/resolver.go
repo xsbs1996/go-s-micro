@@ -148,6 +148,7 @@ func (r *Resolver) sync() {
 	return
 }
 
+// updateServiceList 更新grpc服务端地址列表
 func (r *Resolver) updateServiceList(events []*clientv3.Event) {
 	for _, ev := range events {
 		switch ev.Type {

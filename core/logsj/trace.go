@@ -19,6 +19,7 @@ const (
 	runtime      = "runtime"
 )
 
+// TracingLog 链路追踪日志
 func TracingLog(operation, spanID, traceID interface{}, startTime time.Time, req interface{}) {
 	logrus.WithField(timestampKey, logfunc.GetTimestamp()).
 		WithField(callerKey, logfunc.GetCaller(logfunc.CallerDepth)).
@@ -29,4 +30,9 @@ func TracingLog(operation, spanID, traceID interface{}, startTime time.Time, req
 		WithField(runtime, fmt.Sprintf("%d%s", time.Since(startTime).Milliseconds(), "ms")).
 		WithField(contentKey, req).
 		Info("Tracing")
+}
+
+// BreakerLog 熔断日志
+func BreakerLog(reason string) {
+	logrus.WithField(hostName, sysfunc.Hostname()).WithField(contentKey, reason).Info("Breaker")
 }

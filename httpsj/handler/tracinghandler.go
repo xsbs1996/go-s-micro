@@ -7,6 +7,7 @@ import (
 	"github.com/xsbs1996/go-s-micro/utils/sysfunc"
 )
 
+// TracingHandler 链路追踪中间件
 func TracingHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		carrier, err := trace.Extract(trace.HttpFormat, ctx.Request.Header)
