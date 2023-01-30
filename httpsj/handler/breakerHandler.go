@@ -37,7 +37,7 @@ func addName(name string, brk breaker.Breaker) {
 	breakerNameMap.nameMap[name] = brk
 }
 
-const breakerSeparator = "://"
+const breakerSeparator = " "
 
 // BreakerHandler 熔断中间件
 func BreakerHandler() gin.HandlerFunc {
