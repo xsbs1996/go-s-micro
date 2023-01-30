@@ -26,7 +26,7 @@ func init() {
 
 func checkName(name string) (breaker.Breaker, bool) {
 	breakerNameMap.rw.RLock()
-	defer breakerNameMap.rw.Unlock()
+	defer breakerNameMap.rw.RUnlock()
 	brk, ok := breakerNameMap.nameMap[name]
 	return brk, ok
 }
