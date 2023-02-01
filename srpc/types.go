@@ -1,7 +1,7 @@
 package srpc
 
 import (
-	discov2 "github.com/xsbs1996/go-s-micro/core/discov"
+	"github.com/xsbs1996/go-s-micro/core/discov"
 	"google.golang.org/grpc"
 )
 
@@ -10,19 +10,19 @@ type RpcServer struct {
 	timeout      int64
 	grpcServer   *grpc.Server
 	grpcRegister GrpcRegisterFn
-	etcdRegister *discov2.Register
+	etcdRegister *discov.Register
 }
 
 type RpcServerConf struct {
-	Name     string                   `yaml:"Name" required:"true"`
-	ListenOn string                   `yaml:"ListenOn" required:"true"`
-	Etcd     discov2.EtcdRegisterConf `yaml:"Etcd"`
-	Timeout  int64                    `yaml:"Timeout" default:"2000"`
+	Name     string                  `yaml:"Name" required:"true"`
+	ListenOn string                  `yaml:"ListenOn" required:"true"`
+	Etcd     discov.EtcdRegisterConf `yaml:"Etcd"`
+	Timeout  int64                   `yaml:"Timeout" default:"2000"`
 }
 
 type RpcClientConf struct {
-	Etcd    discov2.EtcdResolverConf `yaml:"Etcd" required:"true"`
-	Timeout int64                    `yaml:"Timeout" default:"2000"`
+	Etcd    discov.EtcdResolverConf `yaml:"Etcd" required:"true"`
+	Timeout int64                   `yaml:"Timeout" default:"2000"`
 }
 
 type GrpcRegisterFn func(*grpc.Server)

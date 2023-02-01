@@ -3,7 +3,7 @@ package srpc
 import (
 	"context"
 	"github.com/sirupsen/logrus"
-	discov2 "github.com/xsbs1996/go-s-micro/core/discov"
+	"github.com/xsbs1996/go-s-micro/core/discov"
 	"github.com/xsbs1996/go-s-micro/srpc/clientinterceptor"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
@@ -13,9 +13,9 @@ import (
 func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn {
 	c.verify()
 
-	discov2.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov2.DialTimeout})
+	discov.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov.DialTimeout})
 	//注册grpc解析器
-	discov2.EtcdResolverRegister(discov2.NewResolver(c.Etcd.Key))
+	discov.EtcdResolverRegister(discov.NewResolver(c.Etcd.Key))
 
 	//获取grpc连接
 	cli, err := NewClient(context.Background(), c, options...)
@@ -28,7 +28,7 @@ func MustNewClient(c RpcClientConf, options ...grpc.DialOption) *grpc.ClientConn
 }
 
 func NewClient(ctx context.Context, c RpcClientConf, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
-	target := discov2.BuildDiscovTarget(c.Etcd.Hosts, c.Etcd.Key)
+	target := discov.BuildDiscovTarget(c.Etcd.Hosts, c.Etcd.Key)
 	options := buildDialOptions()
 	opts = append(opts, options...)
 	conn, err := grpc.DialContext(ctx, target, opts...)
