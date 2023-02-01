@@ -7,35 +7,7 @@ import (
 	"github.com/xsbs1996/go-s-micro/core/logsj"
 	"net/http"
 	"strings"
-	"sync"
 )
-
-type breakerNameList struct {
-	rw      sync.RWMutex
-	nameMap map[string]breaker.Breaker
-}
-
-var breakerNameMap *breakerNameList
-
-func init() {
-	breakerNameMap = &breakerNameList{
-		rw:      sync.RWMutex{},
-		nameMap: make(map[string]breaker.Breaker, 0),
-	}
-}
-
-func checkName(name string) (breaker.Breaker, bool) {
-	breakerNameMap.rw.RLock()
-	defer breakerNameMap.rw.RUnlock()
-	brk, ok := breakerNameMap.nameMap[name]
-	return brk, ok
-}
-
-func addName(name string, brk breaker.Breaker) {
-	breakerNameMap.rw.Lock()
-	defer breakerNameMap.rw.Unlock()
-	breakerNameMap.nameMap[name] = brk
-}
 
 const breakerSeparator = " "
 
@@ -43,11 +15,7 @@ const breakerSeparator = " "
 func BreakerHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		name := strings.Join([]string{ctx.Request.Method, ctx.Request.URL.Path}, breakerSeparator)
-		brk, ok := checkName(name)
-		if !ok {
-			brk = breaker.NewBreaker(breaker.WithName(name))
-			addName(name, brk)
-		}
+		brk := breaker.GetBreaker(name)
 
 		promise, err := brk.Allow()
 		if err != nil {

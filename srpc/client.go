@@ -42,6 +42,7 @@ func buildDialOptions() []grpc.DialOption {
 		grpc.WithBlock(),
 		WithUnaryClientInterceptors(
 			clientinterceptor.TracingInterceptor,
+			clientinterceptor.BreakerInterceptor,
 		),
 	}
 }
