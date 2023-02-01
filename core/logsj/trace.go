@@ -9,12 +9,8 @@ import (
 )
 
 const (
-	callerKey    = "caller"
-	contentKey   = "content"
-	hostName     = "hostname"
 	operationKey = "operation"
 	spanKey      = "span"
-	timestampKey = "timestamp"
 	traceKey     = "trace"
 	runtime      = "runtime"
 )
@@ -30,9 +26,4 @@ func TracingLog(operation, spanID, traceID interface{}, startTime time.Time, req
 		WithField(runtime, fmt.Sprintf("%d%s", time.Since(startTime).Milliseconds(), "ms")).
 		WithField(contentKey, req).
 		Info("Tracing")
-}
-
-// BreakerLog 熔断日志
-func BreakerLog(reason string) {
-	logrus.WithField(hostName, sysfunc.Hostname()).WithField(contentKey, reason).Info("Breaker")
 }

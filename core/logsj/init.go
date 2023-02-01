@@ -5,6 +5,13 @@ import (
 	"os"
 )
 
+const (
+	callerKey    = "caller"
+	contentKey   = "content"
+	hostName     = "hostname"
+	timestampKey = "timestamp"
+)
+
 func init() {
 	logrus.SetOutput(os.Stderr)
 	logrus.SetLevel(logrus.DebugLevel)
