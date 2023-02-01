@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xsbs1996/go-s-micro/core/logsj"
-	"github.com/xsbs1996/go-s-micro/trace"
-	"github.com/xsbs1996/go-s-micro/trace/tracespec"
+	"github.com/xsbs1996/go-s-micro/core/trace"
+	"github.com/xsbs1996/go-s-micro/core/trace/tracespec"
 	"github.com/xsbs1996/go-s-micro/utils/ginfunc"
 )
 

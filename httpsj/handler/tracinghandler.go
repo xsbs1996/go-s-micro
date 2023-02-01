@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/xsbs1996/go-s-micro/trace"
+	"github.com/xsbs1996/go-s-micro/core/trace"
 	"github.com/xsbs1996/go-s-micro/utils/sysfunc"
 )
 

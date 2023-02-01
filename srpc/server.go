@@ -1,7 +1,7 @@
 package srpc
 
 import (
-	discov2 "github.com/xsbs1996/go-s-micro/core/discov"
+	"github.com/xsbs1996/go-s-micro/core/discov"
 	"github.com/xsbs1996/go-s-micro/srpc/serverinterceptors"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
@@ -22,8 +22,8 @@ func MustNewServer(c RpcServerConf, register GrpcRegisterFn) *RpcServer {
 
 	server := grpc.NewServer(options...)
 
-	discov2.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov2.DialTimeout})
-	etcdRegister := discov2.NewRegister(c.Etcd.Key, c.ListenOn, discov2.DefaultServiceTTL)
+	discov.InitEtcdCli(clientv3.Config{Endpoints: c.Etcd.Hosts, DialTimeout: discov.DialTimeout})
+	etcdRegister := discov.NewRegister(c.Etcd.Key, c.ListenOn, discov.DefaultServiceTTL)
 
 	return &RpcServer{
 		listenOn:     c.ListenOn,
