@@ -6,7 +6,7 @@ type window struct {
 	size    int       // 桶集合容量
 }
 
-// NewWindow new一个窗口
+// NewWindow New一个窗口
 func newWindow(size int) *window {
 	buckets := make([]*Bucket, size) //创建桶集合
 	//为桶集合内的桶分配内存
