@@ -1,6 +1,7 @@
 package breaker
 
 import (
+	"github.com/xsbs1996/go-s-micro/core/logsj"
 	"github.com/xsbs1996/go-s-micro/core/rollingwindow"
 	"math"
 	"sync"
@@ -53,6 +54,7 @@ func (b *googleBreaker) accept() error {
 // allow 手动调用
 func (b *googleBreaker) allow() (internalPromise, error) {
 	if err := b.accept(); err != nil {
+		logsj.BreakerLog(err.Error())
 		return nil, err
 	}
 	return googlePromise{
@@ -63,6 +65,7 @@ func (b *googleBreaker) allow() (internalPromise, error) {
 // doReq 自动调用
 func (b *googleBreaker) doReq(req func() error, fallback func(err error) error, acceptable Acceptable) error {
 	if err := b.accept(); err != nil {
+		logsj.BreakerLog(err.Error())
 		if fallback != nil {
 			return fallback(err)
 		} else {
@@ -81,6 +84,7 @@ func (b *googleBreaker) doReq(req func() error, fallback func(err error) error, 
 	if acceptable(err) {
 		b.markSuccess()
 	} else {
+		logsj.BreakerLog(err.Error())
 		b.markFailure()
 	}
 
