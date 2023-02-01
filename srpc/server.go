@@ -66,6 +66,7 @@ func (s *RpcServer) Stop() {
 	s.etcdRegister.Stop()
 }
 
+// WithUnaryServerInterceptors 添加grpc拦截器
 func WithUnaryServerInterceptors(interceptors ...grpc.UnaryServerInterceptor) grpc.ServerOption {
 	return grpc.ChainUnaryInterceptor(interceptors...)
 }
