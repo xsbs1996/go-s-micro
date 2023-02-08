@@ -69,8 +69,8 @@ func init() {
 	}
 }
 
-// CpuCurrentRate 返回cpu目前占用率
-func CpuCurrentRate() uint64 {
+// RefreshCpu 返回cpu目前占用率
+func RefreshCpu() uint64 {
 	total, err := cgroup.GetCpuacctUsage()
 	if err != nil {
 		return 0

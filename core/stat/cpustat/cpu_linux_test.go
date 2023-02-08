@@ -13,7 +13,7 @@ func TestCpuCurrentRate(t *testing.T) {
 	for {
 		select {
 		case <-tt.C:
-			fmt.Println("cup占用率", CpuCurrentRate())
+			fmt.Println("cup占用率", RefreshCpu())
 		}
 	}
 }
