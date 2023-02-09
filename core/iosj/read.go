@@ -1,4 +1,4 @@
-package iofunc
+package iosj
 
 import (
 	"bufio"

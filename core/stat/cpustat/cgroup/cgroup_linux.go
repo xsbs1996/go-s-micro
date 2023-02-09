@@ -2,8 +2,8 @@ package cgroup
 
 import (
 	"fmt"
+	"github.com/xsbs1996/go-s-micro/core/iosj"
 	"github.com/xsbs1996/go-s-micro/core/logsj"
-	"github.com/xsbs1996/go-s-micro/utils/iofunc"
 	"github.com/xsbs1996/go-s-micro/utils/strconvfunc"
 	"os"
 	"path"
@@ -36,7 +36,7 @@ func init() {
 
 // 获取cgroup子系统对应名称与目录
 func getResourceList() error {
-	lines, err := iofunc.ReadTextLines(cgroupFile, iofunc.WithoutBlank())
+	lines, err := iosj.ReadTextLines(cgroupFile, iosj.WithoutBlank())
 	if err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func GetCpuacctUsage() (uint64, error) {
 	if !ok {
 		return 0, nil
 	}
-	data, err := iofunc.ReadText(path.Join(filePath, cgroupCpuacctUsage))
+	data, err := iosj.ReadText(path.Join(filePath, cgroupCpuacctUsage))
 	if err != nil {
 		return 0, err
 	}
@@ -84,7 +84,7 @@ func GetCpuacctUsagePercpu() ([]uint64, error) {
 		return nil, nil
 	}
 
-	data, err := iofunc.ReadText(path.Join(filePath, cgroupCpuacctUsagePercpu))
+	data, err := iosj.ReadText(path.Join(filePath, cgroupCpuacctUsagePercpu))
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func GetCpuCfsQuotaUs() (uint64, error) {
 		return 0, nil
 	}
 
-	data, err := iofunc.ReadText(path.Join(filePath, cgroupCpuCfsQuotaUs))
+	data, err := iosj.ReadText(path.Join(filePath, cgroupCpuCfsQuotaUs))
 	if err != nil {
 		return 0, err
 	}
@@ -125,7 +125,7 @@ func GetCpuCfsPeriodUs() (uint64, error) {
 		return 0, nil
 	}
 
-	data, err := iofunc.ReadText(path.Join(filePath, cgroupCpuCfsPeriodUs))
+	data, err := iosj.ReadText(path.Join(filePath, cgroupCpuCfsPeriodUs))
 	if err != nil {
 		return 0, err
 	}
@@ -140,7 +140,7 @@ func GetCpusetCpus() ([]uint64, error) {
 		return nil, nil
 	}
 
-	data, err := iofunc.ReadText(path.Join(filePath, cgroupCpusetCpus))
+	data, err := iosj.ReadText(path.Join(filePath, cgroupCpusetCpus))
 	if err != nil {
 		return nil, err
 	}

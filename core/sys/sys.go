@@ -1,4 +1,4 @@
-package sysfunc
+package sys
 
 import (
 	"github.com/xsbs1996/go-s-micro/utils/stringfunc"

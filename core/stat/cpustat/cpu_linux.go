@@ -3,9 +3,9 @@ package cpustat
 import (
 	"errors"
 	"fmt"
+	"github.com/xsbs1996/go-s-micro/core/iosj"
 	"github.com/xsbs1996/go-s-micro/core/logsj"
 	"github.com/xsbs1996/go-s-micro/core/stat/cpustat/cgroup"
-	"github.com/xsbs1996/go-s-micro/utils/iofunc"
 	"github.com/xsbs1996/go-s-micro/utils/strconvfunc"
 	"strings"
 	"time"
@@ -107,7 +107,7 @@ func RefreshCpu() uint64 {
 // irq	    从系统启动开始累计到当前时刻，硬中断时间（单位：jiffies）
 // softirq	从系统启动开始累计到当前时刻，软中断时间（单位：jiffies）
 func systemCpuUsage() (uint64, error) {
-	lines, err := iofunc.ReadTextLines("/proc/stat", iofunc.WithoutBlank())
+	lines, err := iosj.ReadTextLines("/proc/stat", iosj.WithoutBlank())
 	if err != nil {
 		return 0, err
 	}

@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/xsbs1996/go-s-micro/core/sys"
 	"github.com/xsbs1996/go-s-micro/core/trace"
-	"github.com/xsbs1996/go-s-micro/utils/sysfunc"
 )
 
 // TracingHandler 链路追踪中间件
@@ -15,7 +15,7 @@ func TracingHandler() gin.HandlerFunc {
 			logrus.Error(err)
 		}
 
-		span := trace.StartServerSpan(ctx, carrier, sysfunc.Hostname(), ctx.Request.RequestURI)
+		span := trace.StartServerSpan(ctx, carrier, sys.Hostname(), ctx.Request.RequestURI)
 		defer span.Finish()
 
 		ctx.Next()
