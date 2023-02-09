@@ -69,7 +69,7 @@ func init() {
 	}
 }
 
-// RefreshCpu 返回cpu目前占用率
+// RefreshCpu 返回cpu目前占用率，以千倍的形式返回
 func RefreshCpu() uint64 {
 	total, err := cgroup.GetCpuacctUsage()
 	if err != nil {
@@ -86,7 +86,7 @@ func RefreshCpu() uint64 {
 	cpuDelta := total - preTotal
 	systemDelta := system - preSystem
 
-	// 计算占用率
+	// 计算占用率并乘以1000返回
 	if cpuDelta > 0 && systemDelta > 0 {
 		usage = uint64((float64(cpuDelta) * float64(cores)) / (float64(systemDelta) * float64(quota)) * 1e3)
 	}
